@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: qala
+      POSTGRES_USER: qala
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qala-local-dev}
+    volumes:
+      - qala_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qala -d qala"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        WITH_VISION: ${VISION_ENABLED:-false}
+    environment:
+      DATABASE_URL: postgresql+psycopg://qala:${POSTGRES_PASSWORD:-qala-local-dev}@db:5432/qala
+      SESSION_SECRET: ${SESSION_SECRET:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      VISION_ENABLED: ${VISION_ENABLED:-false}
+      YOLO_MODEL: ${YOLO_MODEL:-yolo11n.pt}
+    volumes:
+      - qala_models:/home/qala/.cache
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+volumes:
+  qala_data:
+  qala_models:

@@ -1,0 +1,2132 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "QALA TWIN AI",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/demo": {
+      "post": {
+        "summary": "Demo",
+        "operationId": "demo_api_v1_auth_demo_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Register",
+        "operationId": "register_api_v1_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "summary": "Me",
+        "operationId": "me_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/overview": {
+      "get": {
+        "summary": "Overview",
+        "operationId": "overview_api_v1_dashboard_overview_get",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OverviewOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/revenue": {
+      "get": {
+        "summary": "Revenue",
+        "operationId": "revenue_api_v1_dashboard_revenue_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DayOut"
+                  },
+                  "type": "array",
+                  "title": "Response Revenue Api V1 Dashboard Revenue Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/sales": {
+      "get": {
+        "summary": "Sales",
+        "operationId": "sales_api_v1_analytics_sales_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/products": {
+      "get": {
+        "summary": "Product Ranking",
+        "operationId": "product_ranking_api_v1_analytics_products_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RankingOut"
+                  },
+                  "type": "array",
+                  "title": "Response Product Ranking Api V1 Analytics Products Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/forecast": {
+      "get": {
+        "summary": "Forecasting",
+        "operationId": "forecasting_api_v1_analytics_forecast_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/import": {
+      "post": {
+        "summary": "Import Sales",
+        "operationId": "import_sales_api_v1_analytics_import_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_import_sales_api_v1_analytics_import_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulator/queue": {
+      "post": {
+        "summary": "Queue",
+        "operationId": "queue_api_v1_simulator_queue_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueueInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueueOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulator/pricing": {
+      "post": {
+        "summary": "Price",
+        "operationId": "price_api_v1_simulator_pricing_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PriceInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulator/inventory": {
+      "post": {
+        "summary": "Inventory Sim",
+        "operationId": "inventory_sim_api_v1_simulator_inventory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory": {
+      "get": {
+        "summary": "Inventory",
+        "operationId": "inventory_api_v1_inventory_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOut"
+                  },
+                  "type": "array",
+                  "title": "Response Inventory Api V1 Inventory Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add Product",
+        "operationId": "add_product_api_v1_inventory_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/{id}": {
+      "patch": {
+        "summary": "Edit Product",
+        "operationId": "edit_product_api_v1_inventory__id__patch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove Product",
+        "operationId": "remove_product_api_v1_inventory__id__delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/twin/state": {
+      "get": {
+        "summary": "Twin State",
+        "operationId": "twin_state_api_v1_twin_state_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwinOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/twin/occupancy": {
+      "get": {
+        "summary": "Occupancy",
+        "operationId": "occupancy_api_v1_twin_occupancy_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/twin/layout": {
+      "get": {
+        "summary": "Layout",
+        "operationId": "layout_api_v1_twin_layout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LayoutOut"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Edit Layout",
+        "operationId": "edit_layout_api_v1_twin_layout_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LayoutInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LayoutOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/vision/cameras": {
+      "get": {
+        "summary": "Cameras",
+        "operationId": "cameras_api_v1_vision_cameras_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/vision/stats": {
+      "get": {
+        "summary": "Vision Stats",
+        "operationId": "vision_stats_api_v1_vision_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/vision/events": {
+      "get": {
+        "summary": "Events",
+        "operationId": "events_api_v1_vision_events_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/visitors": {
+      "get": {
+        "summary": "Visitors",
+        "operationId": "visitors_api_v1_dashboard_visitors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/vision/analyze-frame": {
+      "post": {
+        "summary": "Frame",
+        "operationId": "frame_api_v1_vision_analyze_frame_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_frame_api_v1_vision_analyze_frame_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/vision/analyze-video": {
+      "post": {
+        "summary": "Video",
+        "operationId": "video_api_v1_vision_analyze_video_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_video_api_v1_vision_analyze_video_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/insights": {
+      "get": {
+        "summary": "Insights",
+        "operationId": "insights_api_v1_dashboard_insights_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/insights": {
+      "get": {
+        "summary": "Insights",
+        "operationId": "insights_api_v1_ai_insights_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/chat": {
+      "post": {
+        "summary": "Chat",
+        "operationId": "chat_api_v1_ai_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings/profile": {
+      "patch": {
+        "summary": "Profile",
+        "operationId": "profile_api_v1_settings_profile_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports": {
+      "get": {
+        "summary": "Reports",
+        "operationId": "reports_api_v1_reports_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/generate": {
+      "post": {
+        "summary": "Generate",
+        "operationId": "generate_api_v1_reports_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/{id}/download": {
+      "get": {
+        "summary": "Download",
+        "operationId": "download_api_v1_reports__id__download_get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_frame_api_v1_vision_analyze_frame_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_frame_api_v1_vision_analyze_frame_post"
+      },
+      "Body_import_sales_api_v1_analytics_import_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "mapping": {
+            "type": "string",
+            "title": "Mapping",
+            "default": "{}"
+          },
+          "commit": {
+            "type": "boolean",
+            "title": "Commit",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_import_sales_api_v1_analytics_import_post"
+      },
+      "Body_video_api_v1_vision_analyze_video_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_video_api_v1_vision_analyze_video_post"
+      },
+      "BusinessOut": {
+        "properties": {
+          "business_id": {
+            "type": "string",
+            "title": "Business Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "is_demo": {
+            "type": "boolean",
+            "title": "Is Demo"
+          },
+          "auth_configured": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auth Configured"
+          }
+        },
+        "type": "object",
+        "required": [
+          "business_id",
+          "name",
+          "city",
+          "is_demo"
+        ],
+        "title": "BusinessOut"
+      },
+      "ChatInput": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "kk",
+              "ru"
+            ],
+            "title": "Locale",
+            "default": "kk"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "ChatInput"
+      },
+      "ChatOut": {
+        "properties": {
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explanation"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "deterministic",
+              "openai_explanation"
+            ],
+            "title": "Mode"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "kk",
+              "ru"
+            ],
+            "title": "Locale"
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Evidence"
+          },
+          "data_source": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "imported"
+            ],
+            "title": "Data Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answer",
+          "mode",
+          "locale",
+          "evidence",
+          "data_source"
+        ],
+        "title": "ChatOut"
+      },
+      "Credentials": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 5,
+            "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "Credentials"
+      },
+      "DayOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "revenue": {
+            "type": "string",
+            "title": "Revenue"
+          },
+          "profit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profit"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "lower": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower"
+          },
+          "upper": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "revenue"
+        ],
+        "title": "DayOut"
+      },
+      "ForecastOut": {
+        "properties": {
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/DayOut"
+            },
+            "type": "array",
+            "title": "Days"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "backtest_mae": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backtest Mae"
+          },
+          "minimum_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Days"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "available",
+          "days"
+        ],
+        "title": "ForecastOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImportOut": {
+        "properties": {
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Headers"
+          },
+          "missing": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing"
+          },
+          "preview": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Preview"
+          },
+          "errors": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "valid_count": {
+            "type": "integer",
+            "title": "Valid Count",
+            "default": 0
+          },
+          "rejected_count": {
+            "type": "integer",
+            "title": "Rejected Count",
+            "default": 0
+          },
+          "committed": {
+            "type": "boolean",
+            "title": "Committed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "headers",
+          "missing",
+          "preview",
+          "errors",
+          "committed"
+        ],
+        "title": "ImportOut"
+      },
+      "LayoutInput": {
+        "properties": {
+          "cashiers": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Cashiers",
+            "default": 2
+          },
+          "shelves": {
+            "type": "integer",
+            "maximum": 16.0,
+            "minimum": 2.0,
+            "title": "Shelves",
+            "default": 8
+          }
+        },
+        "type": "object",
+        "title": "LayoutInput"
+      },
+      "LayoutOut": {
+        "properties": {
+          "cashiers": {
+            "type": "integer",
+            "title": "Cashiers"
+          },
+          "shelves": {
+            "type": "integer",
+            "title": "Shelves"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cashiers",
+          "shelves",
+          "version"
+        ],
+        "title": "LayoutOut"
+      },
+      "OverviewOut": {
+        "properties": {
+          "revenue": {
+            "type": "string",
+            "title": "Revenue"
+          },
+          "cost": {
+            "type": "string",
+            "title": "Cost"
+          },
+          "gross_profit": {
+            "type": "string",
+            "title": "Gross Profit"
+          },
+          "expenses": {
+            "type": "string",
+            "title": "Expenses"
+          },
+          "net_profit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Profit"
+          },
+          "margin": {
+            "type": "number",
+            "title": "Margin"
+          },
+          "growth": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Growth"
+          },
+          "health_score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Health Score"
+          },
+          "low_stock": {
+            "type": "integer",
+            "title": "Low Stock"
+          },
+          "product_count": {
+            "type": "integer",
+            "title": "Product Count"
+          },
+          "sale_count": {
+            "type": "integer",
+            "title": "Sale Count"
+          },
+          "daily": {
+            "items": {
+              "$ref": "#/components/schemas/DayOut"
+            },
+            "type": "array",
+            "title": "Daily"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/RankingOut"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "forecast": {
+            "$ref": "#/components/schemas/ForecastOut"
+          },
+          "occupancy": {
+            "type": "integer",
+            "title": "Occupancy"
+          },
+          "occupancy_source": {
+            "type": "string",
+            "title": "Occupancy Source"
+          },
+          "is_demo": {
+            "type": "boolean",
+            "title": "Is Demo"
+          },
+          "business": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Business"
+          },
+          "period": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Period"
+          }
+        },
+        "type": "object",
+        "required": [
+          "revenue",
+          "cost",
+          "gross_profit",
+          "expenses",
+          "net_profit",
+          "margin",
+          "growth",
+          "health_score",
+          "low_stock",
+          "product_count",
+          "sale_count",
+          "daily",
+          "products",
+          "forecast",
+          "occupancy",
+          "occupancy_source",
+          "is_demo",
+          "business",
+          "period"
+        ],
+        "title": "OverviewOut"
+      },
+      "PriceInput": {
+        "properties": {
+          "current_price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Current Price"
+          },
+          "purchase_cost": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Purchase Cost"
+          },
+          "average_sales": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Average Sales"
+          },
+          "change_percent": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": -80.0,
+            "title": "Change Percent"
+          },
+          "elasticity": {
+            "type": "number",
+            "maximum": 0.0,
+            "minimum": -5.0,
+            "title": "Elasticity",
+            "default": -1.2
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_price",
+          "purchase_cost",
+          "average_sales",
+          "change_percent"
+        ],
+        "title": "PriceInput"
+      },
+      "ProductInput": {
+        "properties": {
+          "sku": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Sku"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "name_kk": {
+            "type": "string",
+            "maxLength": 160,
+            "title": "Name Kk",
+            "default": ""
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 60,
+            "title": "Category",
+            "default": "grocery"
+          },
+          "cost_price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Cost Price"
+          },
+          "selling_price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Selling Price"
+          },
+          "stock_quantity": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Stock Quantity"
+          },
+          "reorder_point": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Reorder Point",
+            "default": 20
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku",
+          "name",
+          "cost_price",
+          "selling_price",
+          "stock_quantity"
+        ],
+        "title": "ProductInput"
+      },
+      "ProductOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "sku": {
+            "type": "string",
+            "title": "Sku"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "name_kk": {
+            "type": "string",
+            "title": "Name Kk"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "cost_price": {
+            "type": "string",
+            "title": "Cost Price"
+          },
+          "selling_price": {
+            "type": "string",
+            "title": "Selling Price"
+          },
+          "stock_quantity": {
+            "type": "integer",
+            "title": "Stock Quantity"
+          },
+          "reorder_point": {
+            "type": "integer",
+            "title": "Reorder Point"
+          },
+          "daily_demand": {
+            "type": "number",
+            "title": "Daily Demand"
+          },
+          "low_stock": {
+            "type": "boolean",
+            "title": "Low Stock"
+          },
+          "suggested_reorder": {
+            "type": "integer",
+            "title": "Suggested Reorder"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "sku",
+          "name",
+          "name_kk",
+          "category",
+          "cost_price",
+          "selling_price",
+          "stock_quantity",
+          "reorder_point",
+          "daily_demand",
+          "low_stock",
+          "suggested_reorder"
+        ],
+        "title": "ProductOut"
+      },
+      "ProfileInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "City"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "city"
+        ],
+        "title": "ProfileInput"
+      },
+      "QueueInput": {
+        "properties": {
+          "customers_per_hour": {
+            "type": "number",
+            "maximum": 600.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Customers Per Hour",
+            "default": 48
+          },
+          "service_time": {
+            "type": "number",
+            "maximum": 600.0,
+            "minimum": 5.0,
+            "title": "Service Time",
+            "default": 65
+          },
+          "cashiers": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Cashiers",
+            "default": 1
+          },
+          "labor_cost": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Labor Cost",
+            "default": "1500"
+          },
+          "hours": {
+            "type": "integer",
+            "maximum": 24.0,
+            "minimum": 1.0,
+            "title": "Hours",
+            "default": 8
+          },
+          "seed": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "default": 42
+          }
+        },
+        "type": "object",
+        "title": "QueueInput"
+      },
+      "QueueOut": {
+        "properties": {
+          "before": {
+            "$ref": "#/components/schemas/QueueScenarioOut"
+          },
+          "after": {
+            "$ref": "#/components/schemas/QueueScenarioOut"
+          },
+          "wait_reduction_percent": {
+            "type": "number",
+            "title": "Wait Reduction Percent"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "measurement": {
+            "type": "string",
+            "const": "simulation",
+            "title": "Measurement"
+          },
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Assumptions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "before",
+          "after",
+          "wait_reduction_percent",
+          "seed",
+          "method",
+          "measurement",
+          "assumptions"
+        ],
+        "title": "QueueOut"
+      },
+      "QueueScenarioOut": {
+        "properties": {
+          "cashiers": {
+            "type": "integer",
+            "title": "Cashiers"
+          },
+          "average_wait_seconds": {
+            "type": "number",
+            "title": "Average Wait Seconds"
+          },
+          "average_queue": {
+            "type": "number",
+            "title": "Average Queue"
+          },
+          "peak_queue": {
+            "type": "integer",
+            "title": "Peak Queue"
+          },
+          "served_customers": {
+            "type": "integer",
+            "title": "Served Customers"
+          },
+          "arrivals": {
+            "type": "integer",
+            "title": "Arrivals"
+          },
+          "operational_cost": {
+            "type": "string",
+            "title": "Operational Cost"
+          },
+          "utilization": {
+            "type": "number",
+            "title": "Utilization"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cashiers",
+          "average_wait_seconds",
+          "average_queue",
+          "peak_queue",
+          "served_customers",
+          "arrivals",
+          "operational_cost",
+          "utilization"
+        ],
+        "title": "QueueScenarioOut"
+      },
+      "RankingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "name_kk": {
+            "type": "string",
+            "title": "Name Kk"
+          },
+          "revenue": {
+            "type": "string",
+            "title": "Revenue"
+          },
+          "gross_profit": {
+            "type": "string",
+            "title": "Gross Profit"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "name_kk",
+          "revenue",
+          "gross_profit",
+          "quantity"
+        ],
+        "title": "RankingOut"
+      },
+      "ReportInput": {
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "csv",
+              "pdf"
+            ],
+            "title": "Format",
+            "default": "csv"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "kk",
+              "ru"
+            ],
+            "title": "Locale",
+            "default": "kk"
+          }
+        },
+        "type": "object",
+        "title": "ReportInput"
+      },
+      "StockInput": {
+        "properties": {
+          "current_stock": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 0.0,
+            "title": "Current Stock"
+          },
+          "daily_demand": {
+            "type": "number",
+            "maximum": 100000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Daily Demand"
+          },
+          "lead_time": {
+            "type": "integer",
+            "maximum": 365.0,
+            "minimum": 1.0,
+            "title": "Lead Time"
+          },
+          "safety_stock": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 0.0,
+            "title": "Safety Stock"
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_stock",
+          "daily_demand",
+          "lead_time",
+          "safety_stock"
+        ],
+        "title": "StockInput"
+      },
+      "TwinOut": {
+        "properties": {
+          "occupancy": {
+            "type": "integer",
+            "title": "Occupancy"
+          },
+          "measurement": {
+            "type": "string",
+            "title": "Measurement"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale"
+          },
+          "coordinates_available": {
+            "type": "boolean",
+            "title": "Coordinates Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "occupancy",
+          "measurement",
+          "stale",
+          "coordinates_available"
+        ],
+        "title": "TwinOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
