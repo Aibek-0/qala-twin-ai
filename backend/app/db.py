@@ -37,6 +37,14 @@ class Base(DeclarativeBase):
     pass
 
 
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String(300))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
 class Business(Base):
     __tablename__ = "businesses"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)

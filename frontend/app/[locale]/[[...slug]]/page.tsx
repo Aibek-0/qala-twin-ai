@@ -14,6 +14,8 @@ export default async function Page({
       "login",
       "register",
       "dashboard",
+      "operations",
+      "actions",
       "vision",
       "digital-twin",
       "simulator",

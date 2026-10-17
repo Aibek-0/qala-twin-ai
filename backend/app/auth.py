@@ -1,15 +1,62 @@
 import os, secrets, time
+import hashlib, hmac
 from datetime import datetime, timedelta, timezone
 import httpx, jwt
 from fastapi import Depends, HTTPException, Request, Response
 from sqlalchemy import select
-from .db import Business, Product, Sale, Expense, Record, get_db, uid
+from sqlalchemy.exc import IntegrityError
+from .db import Business, Product, Sale, Expense, Record, User, get_db, uid
 from .seed import DEMO_ID
 
 SECRET = os.getenv("SESSION_SECRET") or secrets.token_hex(32)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_KEY = os.getenv("SUPABASE_ANON_KEY", "")
 COOKIE = "qala_session"
+
+
+def hash_password(password):
+    salt = secrets.token_hex(16)
+    digest = hashlib.pbkdf2_hmac(
+        "sha256", password.encode(), bytes.fromhex(salt), 600000
+    ).hex()
+    return f"pbkdf2_sha256$600000${salt}${digest}"
+
+
+def verify_password(password, encoded):
+    try:
+        method, rounds, salt, digest = encoded.split("$")
+        if method != "pbkdf2_sha256":
+            return False
+        actual = hashlib.pbkdf2_hmac(
+            "sha256", password.encode(), bytes.fromhex(salt), int(rounds)
+        ).hex()
+        return hmac.compare_digest(actual, digest)
+    except (ValueError, TypeError):
+        return False
+
+
+def local_auth(credentials, db, register=False):
+    email = credentials.email.strip().lower()
+    user = db.scalar(select(User).where(User.email == email))
+    if register:
+        if user:
+            raise HTTPException(409, detail="email_exists")
+        user = User(email=email, password_hash=hash_password(credentials.password))
+        db.add(user)
+        try:
+            db.flush()
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(409, detail="email_exists")
+    elif not user or not verify_password(credentials.password, user.password_hash):
+        raise HTTPException(400, detail="invalid_credentials")
+    return user.id
+
+
+async def authenticate(credentials, db, register=False):
+    if SUPABASE_URL and SUPABASE_KEY:
+        return await supabase_auth(credentials, register)
+    return local_auth(credentials, db, register)
 
 
 def issue(response, business):
@@ -114,7 +161,7 @@ async def supabase_auth(credentials, register=False):
             r = await client.post(
                 SUPABASE_URL + endpoint,
                 headers={"apikey": SUPABASE_KEY},
-                json=credentials.model_dump(),
+                json=credentials.model_dump(include={"email", "password"}),
             )
             if r.status_code >= 400:
                 raise HTTPException(

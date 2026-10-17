@@ -1,6 +1,6 @@
 # QALA TWIN AI: architecture and numerical methods
 
-The MVP uses Next.js App Router, next-intl, Tailwind 4, a shadcn-style Radix Button, Framer Motion, Recharts and a lazy React Three Fiber canvas. A same-origin `/api/v1` rewrite forwards requests to FastAPI; API credentials never enter the browser bundle. SQLAlchemy uses PostgreSQL NUMERIC(16,2); SQLite is an explicit local development fallback. The initial schema is generated from the same models used at runtime. Users authenticate through Supabase; the application stores provider-verified identity and a tenant-scoped HttpOnly session, not passwords. Demo login clones the seed into a separate tenant.
+The application uses Next.js App Router, next-intl, Tailwind 4, a shadcn-style Radix Button, Framer Motion, Recharts and a lazy React Three Fiber canvas. Local Onest and Manrope fonts support Kazakh/Russian text. A same-origin `/api/v1` rewrite forwards requests to FastAPI; API credentials never enter the browser bundle. SQLAlchemy uses PostgreSQL NUMERIC(16,2); SQLite is an explicit local development fallback. The initial schema is generated from the same models used at runtime. Users authenticate through optional Supabase or persistent local accounts using salted PBKDF2-SHA256 password hashes. The application issues tenant-scoped HttpOnly sessions. Real registrations start empty; demo login clones the seed into a separate tenant. See [Workspace v2](WORKSPACE-V2.md) for sales entry, receiving, expenses and the decision center.
 
 ## Financial calculations
 

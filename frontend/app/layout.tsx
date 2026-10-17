@@ -1,7 +1,8 @@
-import "@fontsource-variable/inter";
+import "@fontsource-variable/onest";
 import "@fontsource-variable/manrope";
 import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
+import "./refresh.css";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "QALA TWIN AI — Business Intelligence",

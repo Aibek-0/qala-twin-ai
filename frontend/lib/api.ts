@@ -15,7 +15,13 @@ export async function api<T>(
     credentials: "same-origin",
     signal:
       options.signal ||
-      AbortSignal.timeout(path.includes("video") ? 180000 : 30000),
+      AbortSignal.timeout(
+        path.includes("video")
+          ? 180000
+          : path.includes("ai/chat")
+            ? 60000
+            : 30000,
+      ),
     headers:
       options.body instanceof FormData
         ? options.headers

@@ -10,7 +10,11 @@ const TwinScene = dynamic(() => import("../twin-scene"), {
   ssr: false,
   loading: () => <div className="skeleton scene-skeleton" />,
 });
-export default function DigitalTwin() {
+export default function DigitalTwin({
+  businessName = "QALA",
+}: {
+  businessName?: string;
+}) {
   const t = useTranslations();
   const [state, setState] = useState<TwinState>();
   const [ready, setReady] = useState(false);
@@ -84,7 +88,7 @@ export default function DigitalTwin() {
         <section className="panel twin-view">
           <div className="twin-view-bar">
             <span>
-              <i /> QALA MART / 3D VIEW
+              <i /> {businessName} / 3D
             </span>
             <div>
               <Button

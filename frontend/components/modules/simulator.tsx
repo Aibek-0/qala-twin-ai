@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   FlaskConical,
@@ -88,6 +88,19 @@ export default function Simulator() {
   const [result, setResult] = useState<Result>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  useEffect(() => {
+    const scenario = new URLSearchParams(window.location.search).get(
+      "scenario",
+    );
+    if (
+      scenario === "queue" ||
+      scenario === "pricing" ||
+      scenario === "inventory"
+    ) {
+      setTab(scenario);
+      setValues({ ...config[scenario] });
+    }
+  }, []);
   async function run(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);

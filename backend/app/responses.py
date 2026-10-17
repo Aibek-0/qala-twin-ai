@@ -113,6 +113,7 @@ class LayoutOut(BaseModel):
 
 
 class ChatOut(BaseModel):
+    provider_error: str | None = None
     answer: str
     explanation: str | None = None
     mode: Literal["deterministic", "openai_explanation"]

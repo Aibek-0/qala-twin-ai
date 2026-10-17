@@ -7,7 +7,7 @@ page.on('pageerror',e=>errors.push(e.message));
 await mkdir('../.runtime/screenshots',{recursive:true});
 await page.goto('http://127.0.0.1:3000/kk');
 await page.getByRole('heading',{name:'Бизнесіңіз. Бір қадам алда.'}).waitFor();
-await page.locator('.hero-model canvas').waitFor();
+await page.locator('.hero-store-scene canvas').waitFor();
 await page.screenshot({path:'../.runtime/screenshots/landing.png',fullPage:true});
 await page.request.post('http://127.0.0.1:3000/api/v1/auth/demo');
 await page.goto('http://127.0.0.1:3000/ru/dashboard');

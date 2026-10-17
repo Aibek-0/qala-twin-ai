@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select, delete
 from .db import Base, engine, get_db, Session, Business, Product, Sale, Expense, Record
 from .seed import seed_demo
-from .auth import current, issue, clone_demo, supabase_auth, COOKIE
+from .auth import current, issue, clone_demo, authenticate, COOKIE
 from .schemas import (
     Credentials,
     QueueInput,
@@ -121,7 +121,7 @@ def demo(response: Response, db=Depends(get_db)):
 
 @app.post(P + "/auth/login")
 async def login(x: Credentials, response: Response, db=Depends(get_db)):
-    owner = await supabase_auth(x)
+    owner = await authenticate(x, db)
     b = db.scalar(select(Business).where(Business.owner_id == owner))
     if not b:
         b = Business(owner_id=owner, name="My business", city="Taraz")
@@ -132,12 +132,14 @@ async def login(x: Credentials, response: Response, db=Depends(get_db)):
 
 @app.post(P + "/auth/register")
 async def register(x: Credentials, response: Response, db=Depends(get_db)):
-    owner = await supabase_auth(x, True)
+    owner = await authenticate(x, db, True)
     if owner is None:
         return {"confirmation_required": True}
     b = db.scalar(select(Business).where(Business.owner_id == owner))
     if not b:
-        b = Business(owner_id=owner, name="My business", city="Taraz")
+        b = Business(
+            owner_id=owner, name=x.business_name.strip() or "My business", city=x.city
+        )
         db.add(b)
         db.commit()
     return issue(response, b)
@@ -630,9 +632,41 @@ async def chat(x: ChatInput, b=Depends(current), db=Depends(get_db)):
         )
     from .ai import explain
 
+    recent = db.scalars(
+        select(Record)
+        .where(Record.business_id == b.id, Record.kind == "conversation")
+        .order_by(Record.created_at.desc())
+        .limit(4)
+    ).all()
+    from .operations import actions
+
     explanation = await explain(
-        x.question, x.locale, {"calculated_answer": answer, "metrics": m}
+        x.question,
+        x.locale,
+        {
+            "business": b.name,
+            "calculated_answer": answer,
+            "metrics": m,
+            "stock_and_margin_actions": actions(b, db),
+            "recent_conversation": [r.data for r in reversed(recent)],
+        },
     )
+    from .ai import provider_state
+
+    db.add(
+        Record(
+            business_id=b.id,
+            kind="conversation",
+            data={
+                "question": x.question,
+                "answer": answer,
+                "explanation": explanation,
+                "locale": x.locale,
+                "mode": "openai_explanation" if explanation else "deterministic",
+            },
+        )
+    )
+    db.commit()
     return {
         "answer": answer,
         "explanation": explanation,
@@ -640,6 +674,7 @@ async def chat(x: ChatInput, b=Depends(current), db=Depends(get_db)):
         "locale": x.locale,
         "evidence": m,
         "data_source": "demo" if b.is_demo else "imported",
+        "provider_error": provider_state.get("error") if not explanation else None,
     }
 
 
@@ -782,3 +817,8 @@ def download(id: str, b=Depends(current), db=Depends(get_db)):
             "Content-Disposition": f'attachment; filename="qala-report-{id[:8]}.{fmt}"'
         },
     )
+
+
+from .operations import router as operations_router
+
+app.include_router(operations_router)

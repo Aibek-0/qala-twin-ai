@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { motion, useReducedMotion, MotionConfig } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import {
   LayoutDashboard,
+  Target,
+  ShoppingBag,
   ScanLine,
   Boxes,
   FlaskConical,
@@ -33,7 +35,7 @@ import dynamic from "next/dynamic";
 import { api, errorKey, type Business } from "@/lib/api";
 import { Button } from "./ui/button";
 import { Badge, Failure, Loading, Modal, Spinner } from "./ui/shared";
-const Dashboard = dynamic(() => import("./dashboard"), {
+const Dashboard = dynamic(() => import("./overview"), {
   loading: () => <Loading />,
 });
 const Analytics = dynamic(() => import("./modules/analytics"), {
@@ -64,8 +66,17 @@ const TwinScene = dynamic(() => import("./twin-scene"), {
   ssr: false,
   loading: () => <div className="skeleton scene-skeleton" />,
 });
+const Landing = dynamic(() => import("./landing"));
+const Operations = dynamic(() => import("./modules/operations"), {
+  loading: () => <Loading />,
+});
+const Actions = dynamic(() => import("./modules/actions"), {
+  loading: () => <Loading />,
+});
 const navigation = [
   { key: "dashboard", icon: LayoutDashboard },
+  { key: "actions", icon: Target },
+  { key: "operations", icon: ShoppingBag },
   { key: "digital-twin", icon: Boxes },
   { key: "vision", icon: ScanLine },
   { key: "simulator", icon: FlaskConical },
@@ -101,6 +112,7 @@ export default function App({ page }: { page: string }) {
   const [search, setSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [notification, setNotification] = useState(false);
+  const [issueCount, setIssueCount] = useState(0);
   const [online, setOnline] = useState(true);
   const publicPage = ["landing", "login", "register"].includes(page);
   useEffect(() => {
@@ -130,6 +142,11 @@ export default function App({ page }: { page: string }) {
     setError("");
     try {
       setBusiness(await api<Business>("/auth/me"));
+      const issues = await api<{
+        low_stock: unknown[];
+        loss_products: unknown[];
+      }>("/business/actions");
+      setIssueCount(issues.low_stock.length + issues.loss_products.length);
     } catch (e) {
       setError(errorKey(e));
       if (errorKey(e) === "unauthorized")
@@ -208,7 +225,7 @@ export default function App({ page }: { page: string }) {
           )}
           <footer>
             <Brand />
-            <span>{t("footer")}</span>
+            <span>{t("productFooter")}</span>
             <span>© 2026 QALA TWIN AI</span>
           </footer>
         </div>
@@ -236,10 +253,10 @@ export default function App({ page }: { page: string }) {
                 <Store size={19} />
               </span>
               <div>
-                <strong>{business?.name || "QALA MART"}</strong>
+                <strong>{business?.name || t("business")}</strong>
                 <small>{business?.city || "Taraz"} · KZ</small>
               </div>
-              <ChevronDown size={14} />
+
             </div>
             <span className="nav-label">{t("workspace")}</span>
             <nav>
@@ -271,7 +288,9 @@ export default function App({ page }: { page: string }) {
                 <span className="demo-orb">
                   <Sparkles size={19} />
                 </span>
-                <strong>{t(business?.is_demo ? "demo" : "business")}</strong>
+                <strong>
+                  {t(business?.is_demo ? "demo" : "realBusiness")}
+                </strong>
                 <p>{business?.is_demo ? "QALA MART · 48 SKU" : "KZT"}</p>
                 <Link href={`/${locale}/reports`}>
                   {t("reports")}
@@ -294,10 +313,14 @@ export default function App({ page }: { page: string }) {
                 <span>{t("collapse")}</span>
               </button>
               <div className="user-profile">
-                <span className="avatar">QM</span>
+                <span className="avatar">
+                  {business?.name.slice(0, 2).toUpperCase() || "Q"}
+                </span>
                 <div>
-                  <strong>{business?.name || "QALA MART"}</strong>
-                  <small>{t(business?.is_demo ? "demo" : "business")}</small>
+                  <strong>{business?.name || t("business")}</strong>
+                  <small>
+                    {t(business?.is_demo ? "demo" : "realBusiness")}
+                  </small>
                 </div>
                 <Button
                   variant="ghost"
@@ -356,22 +379,38 @@ export default function App({ page }: { page: string }) {
                   {notification && (
                     <div className="notification-popover panel">
                       <h3>{t("notifications")}</h3>
-                      <p>{t("notificationsEmpty")}</p>
+                      <p>
+                        {issueCount
+                          ? `${issueCount} ${t("openIssues")}`
+                          : t("notificationsEmpty")}
+                      </p>
+                      <Link className="text-link" href={`/${locale}/actions`}>
+                        {t("openActionCenter")}
+                        <ArrowRight size={15} />
+                      </Link>
                     </div>
                   )}
                 </div>
-                <span className="avatar small">QM</span>
+                <span className="avatar small">
+                  {business?.name.slice(0, 2).toUpperCase() || "Q"}
+                </span>
               </div>
             </header>
             <main className="content">
               <div className="source-bar">
                 <span>
                   <i />
-                  {t(business?.is_demo ? "demoNote" : "imported")}
+                  {t(business?.is_demo ? "demoNote" : "realBusiness")}
                 </span>
                 <span className="source-brand">
-                  SEE <b>→</b> ANALYZE <b>→</b> PREDICT <b>→</b> SIMULATE{" "}
-                  <b>→</b> OPTIMIZE
+                  {business?.is_demo ? (
+                    <Link className="text-link" href={`/${locale}/register`}>
+                      {t("startMyBusiness")}
+                      <ArrowUpRight size={15} />
+                    </Link>
+                  ) : (
+                    <>{t("yourData")} · KZT</>
+                  )}
                 </span>
               </div>
               {error ? (
@@ -386,6 +425,10 @@ export default function App({ page }: { page: string }) {
                 >
                   {page === "dashboard" ? (
                     <Dashboard />
+                  ) : page === "operations" ? (
+                    <Operations />
+                  ) : page === "actions" ? (
+                    <Actions />
                   ) : page === "analytics" ? (
                     <Analytics />
                   ) : page === "simulator" ? (
@@ -395,7 +438,7 @@ export default function App({ page }: { page: string }) {
                   ) : page === "ai-assistant" ? (
                     <Advisor />
                   ) : page === "digital-twin" ? (
-                    <DigitalTwin />
+                    <DigitalTwin businessName={business.name} />
                   ) : page === "vision" ? (
                     <Vision />
                   ) : page === "reports" ? (
@@ -413,7 +456,7 @@ export default function App({ page }: { page: string }) {
               )}
               <div className="workspace-footer">
                 <span>QALA TWIN AI</span>
-                <span>{t("footer")}</span>
+                <span>{t("productFooter")}</span>
               </div>
             </main>
           </div>
@@ -478,6 +521,8 @@ function Auth({ register }: { register: boolean }) {
           method: "POST",
           body: JSON.stringify({
             email: f.get("email"),
+            business_name: f.get("business_name") || undefined,
+            city: f.get("city") || undefined,
             password: f.get("password"),
           }),
         },
@@ -509,6 +554,28 @@ function Auth({ register }: { register: boolean }) {
         <p>{t("authSub")}</p>
         {error && <Failure code={error} />}
         <form onSubmit={submit}>
+          {register && (
+            <>
+              <label>
+                {t("businessName")}
+                <input
+                  name="business_name"
+                  required
+                  maxLength={120}
+                  placeholder={t("businessExample")}
+                />
+              </label>
+              <label>
+                {t("city")}
+                <input
+                  name="city"
+                  required
+                  defaultValue="Тараз"
+                  maxLength={120}
+                />
+              </label>
+            </>
+          )}
           <label>
             {t("email")}
             <input
@@ -545,13 +612,13 @@ function Auth({ register }: { register: boolean }) {
           </div>
         )}
         <div className="auth-divider">
-          <span>QALA MART</span>
+          <span>{t("tryBeforeConnecting")}</span>
         </div>
         <Button variant="outline" disabled={!!busy} onClick={demo}>
           {busy === "demo" ? <Spinner /> : <Sparkles size={17} />}{" "}
           {t("exploreDemo")}
         </Button>
-        <small>{t("authHint")}</small>
+        <small>{t("accountPersistence")}</small>
         <p className="auth-link">
           {t(register ? "haveAccount" : "noAccount")}{" "}
           <Link href={`/${locale}/${register ? "login" : "register"}`}>
@@ -561,178 +628,4 @@ function Auth({ register }: { register: boolean }) {
       </section>
     </main>
   );
-}
-function Landing() {
-  const t = useTranslations();
-  const locale = useLocale();
-  const reduced = useReducedMotion();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  async function demo() {
-    setBusy(true);
-    try {
-      await api("/auth/demo", { method: "POST" });
-      window.location.assign(`/${locale}/dashboard`);
-    } catch (e) {
-      setError(errorKey(e));
-      setBusy(false);
-    }
-  }
-  const steps = [
-    { key: "see", icon: ScanLine },
-    { key: "analyze", icon: ChartNoAxesCombined },
-    { key: "predict", icon: Sparkles },
-    { key: "simulate", icon: FlaskConical },
-    { key: "optimize", icon: TrendingIcon },
-  ];
-  return (
-    <main className="landing">
-      <section className="hero">
-        <div className="hero-grid" />
-        <motion.div
-          className="hero-copy"
-          initial={false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Badge>
-            <span className="pulse-dot" />
-            {t("heroEyebrow")}
-          </Badge>
-          <h1>{t("heroTitle")}</h1>
-          <p>{t("heroSub")}</p>
-          <div className="hero-actions">
-            <Button onClick={demo} disabled={busy}>
-              {busy ? <Spinner /> : <Sparkles size={17} />} {t("exploreDemo")}
-              <ArrowRight size={17} />
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href={`/${locale}/login`}>
-                {t("openPlatform")}
-                <ArrowUpRight size={16} />
-              </Link>
-            </Button>
-          </div>
-          {error && <Failure code={error} />}
-          <span className="hero-footnote">
-            <i />
-            {t("heroFootnote")}
-          </span>
-        </motion.div>
-        <motion.div
-          className="hero-model"
-          initial={false}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <div className="model-topline">
-            <span>
-              <i /> QALA MART / DIGITAL TWIN
-            </span>
-            <Badge>{t("demo")}</Badge>
-          </div>
-          <TwinScene compact />
-          <div className="model-stats">
-            <div>
-              <small>{t("occupancy")}</small>
-              <strong>
-                18 <span>{t("people")}</span>
-              </strong>
-            </div>
-            <div>
-              <small>{t("product")}</small>
-              <strong>
-                48 <span>SKU</span>
-              </strong>
-            </div>
-            <div>
-              <small>{t("source")}</small>
-              <strong className="positive">{t("demo")}</strong>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-      <div className="technology-strip">
-        <span>SEE</span>
-        <i>→</i>
-        <span>ANALYZE</span>
-        <i>→</i>
-        <span>PREDICT</span>
-        <i>→</i>
-        <span>SIMULATE</span>
-        <i>→</i>
-        <span>OPTIMIZE</span>
-      </div>
-      <section className="landing-section" id="how">
-        <span className="eyebrow">01 / QALA INTELLIGENCE</span>
-        <h2>{t("howItWorks")}</h2>
-        <p>{t("howSub")}</p>
-        <div className="steps-grid">
-          {steps.map((s, i) => (
-            <motion.article
-              className="panel"
-              key={s.key}
-              initial={false}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06 }}
-            >
-              <div>
-                <span className="icon-chip blue">
-                  <s.icon size={20} />
-                </span>
-                <span className="step-number">0{i + 1}</span>
-              </div>
-              <h3>{t(s.key)}</h3>
-              <p>{t(s.key + "Body")}</p>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-      <section className="landing-section impact">
-        <div>
-          <span className="eyebrow">02 / BUSINESS IMPACT</span>
-          <h2>{t("impactTitle")}</h2>
-          <p>{t("impactSub")}</p>
-          <Button variant="outline" onClick={demo} disabled={busy}>
-            {t("exploreDemo")}
-            <ArrowRight size={16} />
-          </Button>
-        </div>
-        <div className="impact-metrics">
-          {["impact1", "impact2", "impact3"].map((k, i) => (
-            <div className="panel" key={k}>
-              <strong>
-                {[48, 30, 3][i]}
-                <span>+</span>
-              </strong>
-              <p>{t(k)}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="landing-section tech-section" id="technology">
-        <Sparkles size={30} />
-        <h2>{t("technology")}</h2>
-        <p>{t("technologySub")}</p>
-        <div className="tech-pills">
-          {["Next.js", "FastAPI", "YOLO", "PostgreSQL", "Three.js"].map((s) => (
-            <span key={s}>{s}</span>
-          ))}
-        </div>
-      </section>
-      <section className="cta panel">
-        <span className="eyebrow">QALA TWIN AI</span>
-        <h2>{t("ctaTitle")}</h2>
-        <p>{t("ctaSub")}</p>
-        <Button onClick={demo} disabled={busy}>
-          {busy ? <Spinner /> : <Sparkles size={17} />} {t("exploreDemo")}
-          <ArrowRight size={17} />
-        </Button>
-      </section>
-    </main>
-  );
-}
-function TrendingIcon({ size = 20 }: { size?: number }) {
-  return <ChartNoAxesCombined size={size} />;
 }

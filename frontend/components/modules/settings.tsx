@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Save,
@@ -30,6 +30,20 @@ export default function SettingsPage({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+  const [ai, setAi] = useState<{
+    configured: boolean;
+    model: string | null;
+    last_error: string | null;
+  }>();
+  useEffect(() => {
+    api<{
+      configured: boolean;
+      model: string | null;
+      last_error: string | null;
+    }>("/ai/status")
+      .then(setAi)
+      .catch(() => {});
+  }, []);
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -131,7 +145,7 @@ export default function SettingsPage({
               <Badge>{t(business.is_demo ? "demo" : "imported")}</Badge>
             </div>
             <p className="panel-note">
-              {business.is_demo ? t("sourceNote") : t("imported")}
+              {business.is_demo ? t("sourceNote") : t("realSourceNote")}
             </p>
             <div className="setting-auth">
               <ShieldCheck size={18} />
@@ -139,9 +153,17 @@ export default function SettingsPage({
                 {t(
                   business.auth_configured
                     ? "authConfigured"
-                    : "authNotConfigured",
+                    : "localAuthActive",
                 )}
               </p>
+            </div>
+            <div className="setting-ai">
+              <h3>{t("aiSettings")}</h3>
+              <Badge tone={ai?.configured ? "green" : "orange"}>
+                {t(ai?.configured ? "aiConfigured" : "ai_not_configured")}
+              </Badge>
+              {ai?.model && <p className="mono">{ai.model}</p>}
+              {ai?.last_error && <Failure code={ai.last_error} />}
             </div>
           </section>
         </div>

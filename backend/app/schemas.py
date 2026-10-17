@@ -8,6 +8,26 @@ class Credentials(BaseModel):
         min_length=5, max_length=254, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$"
     )
     password: str = Field(min_length=8, max_length=128)
+    business_name: str = Field(default="", max_length=120)
+    city: str = Field(default="Taraz", min_length=1, max_length=120)
+
+
+class SaleInput(BaseModel):
+    product_id: str = Field(min_length=1, max_length=36)
+    quantity: int = Field(ge=1, le=1000000)
+    unit_price: Decimal | None = Field(
+        default=None, gt=0, le=10000000, decimal_places=2
+    )
+
+
+class ExpenseInput(BaseModel):
+    category: str = Field(min_length=1, max_length=60)
+    amount: Decimal = Field(gt=0, le=100000000, decimal_places=2)
+    date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+
+
+class ReceiveInput(BaseModel):
+    quantity: int = Field(ge=1, le=1000000)
 
 
 class QueueInput(BaseModel):

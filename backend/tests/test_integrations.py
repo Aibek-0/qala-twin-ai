@@ -3,13 +3,13 @@ from unittest.mock import AsyncMock, patch
 import httpx, pytest
 
 
-def test_supabase_unconfigured(client, monkeypatch):
+def test_local_login_rejects_unknown_user(client, monkeypatch):
     monkeypatch.setattr("backend.app.auth.SUPABASE_URL", "")
     assert (
         client.post(
             "/api/v1/auth/login", json={"email": "a@b.kz", "password": "abcdefgh"}
         ).status_code
-        == 503
+        == 400
     )
 
 

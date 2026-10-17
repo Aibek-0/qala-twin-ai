@@ -1,5 +1,7 @@
 # Verification — 2026-10-16
 
+**Update 2026-10-17:** the redesigned real-business workspace passes **35 backend tests** and **7 browser workflows**, with production build success. See [Workspace v2](WORKSPACE-V2.md). The provided OpenAI credential was checked against the live API and returned `401 invalid_api_key`; successful paid-model access is not claimed. The original release checks below remain as historical context.
+
 Verified on Windows with Node.js 24, Python 3.11, Chromium (Playwright), and PostgreSQL 17 in Docker.
 
 - `python -m pytest backend/tests -q`: **28 passed**. Covers Decimal calculations, reproducible queue results, invalid simulation input, forecast history, CSV/XLSX validation and atomic imports, duplicate import rejection, session authorization, tenant isolation, layout persistence, localized advisor, provider failure fallback, rejection of AI-invented numeric explanations, PDF/CSV reports and vision-to-twin state synchronization. Supabase and OpenAI integrations use mocks in these tests.

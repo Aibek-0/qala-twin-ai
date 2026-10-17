@@ -36,15 +36,13 @@ test("CSV preview and import changes analytics", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Аналитика продаж", exact: true }),
   ).toBeVisible();
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "e2e.csv",
-      mimeType: "text/csv",
-      buffer: Buffer.from(
-        "date,product_name,quantity,unit_price,unit_cost\n2026-10-16,Imported E2E,2,500,300\n",
-      ),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "e2e.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(
+      "date,product_name,quantity,unit_price,unit_cost\n2026-10-16,Imported E2E,2,500,300\n",
+    ),
+  });
   await expect(page.getByText("Корректных строк: 1")).toBeVisible();
   await page.getByRole("button", { name: "Импортировать строки" }).click();
   await expect(page.getByText("Данные импортированы")).toBeVisible();

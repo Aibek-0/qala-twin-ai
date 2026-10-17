@@ -20,6 +20,7 @@ type Message = {
   locale: string;
   explanation?: string;
   evidence?: Record<string, string | number | null>;
+  provider_error?: string | null;
 };
 export default function Advisor() {
   const t = useTranslations();
@@ -29,7 +30,41 @@ export default function Advisor() {
   const [mode, setMode] = useState("deterministic");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [connectionError, setConnectionError] = useState("");
   const bottom = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    api<{ configured: boolean; last_error: string | null }>("/ai/status")
+      .then((s) => {
+        setMode(s.configured ? "configured" : "deterministic");
+        setConnectionError(s.last_error || "");
+      })
+      .catch(() => {});
+    api<
+      {
+        question: string;
+        answer: string;
+        explanation?: string;
+        locale: string;
+        mode: string;
+      }[]
+    >("/ai/history")
+      .then((rows) =>
+        setMessages((old) =>
+          old.length
+            ? old
+            : rows.flatMap((r) => [
+                { role: "user" as const, text: r.question, locale: r.locale },
+                {
+                  role: "assistant" as const,
+                  text: r.answer,
+                  explanation: r.explanation,
+                  locale: r.locale,
+                },
+              ]),
+        ),
+      )
+      .catch(() => {});
+  }, []);
   useEffect(() => {
     bottom.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, busy]);
@@ -45,11 +80,13 @@ export default function Advisor() {
         explanation?: string;
         mode: string;
         evidence: Record<string, string | number | null>;
+        provider_error?: string | null;
       }>("/ai/chat", {
         method: "POST",
         body: JSON.stringify({ question: text, locale }),
       });
       setMode(r.mode);
+      setConnectionError(r.provider_error || "");
       setMessages((m) => [
         ...m,
         {
@@ -58,6 +95,7 @@ export default function Advisor() {
           explanation: r.explanation,
           locale,
           evidence: r.evidence,
+          provider_error: r.provider_error,
         },
       ]);
     } catch (e) {
@@ -76,9 +114,16 @@ export default function Advisor() {
         </div>
         <Badge tone="purple">
           <Sparkles size={13} />
-          {t(mode === "deterministic" ? "fallback" : "openaiExplanation")}
+          {t(
+            mode === "configured"
+              ? "aiConfigured"
+              : mode === "deterministic"
+                ? "fallback"
+                : "aiConnected",
+          )}
         </Badge>
       </div>
+      {connectionError && <Failure code={connectionError} />}
       <section className="panel advisor-panel">
         <div className="advisor-scroll">
           {!messages.length ? (
@@ -117,13 +162,19 @@ export default function Advisor() {
                   <span className="chat-role">
                     {m.role === "assistant" ? "QALA ADVISOR" : "QALA MART"}
                   </span>
-                  <p>{m.text}</p>
+                  {m.provider_error && <Failure code={m.provider_error} />}
                   {m.explanation && (
                     <div className="ai-explanation">
-                      <Badge tone="purple">{t("openaiExplanation")}</Badge>
+                      <Badge tone="green">{t("aiPlan")}</Badge>
                       <p>{m.explanation}</p>
                     </div>
                   )}
+                  <div className="calculated-answer">
+                    {m.role === "assistant" && (
+                      <span>{t("calculatedFacts")}</span>
+                    )}
+                    <p>{m.text}</p>
+                  </div>
                   {m.evidence && (
                     <div className="chat-evidence">
                       <Database size={12} />

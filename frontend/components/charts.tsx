@@ -60,7 +60,7 @@ export function RevenueChart({
           />
           <XAxis
             dataKey="label"
-            tick={{ fill: "var(--muted)", fontSize: 11 }}
+            tick={{ fill: "var(--muted)", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
             minTickGap={30}
@@ -69,7 +69,7 @@ export function RevenueChart({
             tickFormatter={(v) =>
               Number(v) >= 1000 ? `${Math.round(Number(v) / 1000)}k` : String(v)
             }
-            tick={{ fill: "var(--muted)", fontSize: 11 }}
+            tick={{ fill: "var(--muted)", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
             width={45}
@@ -129,14 +129,14 @@ export function VisitorChart({
           />
           <XAxis
             dataKey="hour"
-            tick={{ fill: "var(--muted)", fontSize: 10 }}
+            tick={{ fill: "var(--muted)", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
             interval={2}
           />
           <YAxis
             width={28}
-            tick={{ fill: "var(--muted)", fontSize: 10 }}
+            tick={{ fill: "var(--muted)", fontSize: 12 }}
             tickLine={false}
             axisLine={false}
           />
