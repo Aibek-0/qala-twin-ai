@@ -1,4 +1,5 @@
 /* QALA workspace: readable typography, clear hierarchy and action-first layouts. */
+.operations-grid > * { min-width: 0; }
 :root {
   --bg: #0c1218;
   --sidebar: #0e151c;

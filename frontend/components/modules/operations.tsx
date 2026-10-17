@@ -118,7 +118,7 @@ export default function Operations() {
           <h1>{t("operations")}</h1>
           <p>{t("operationsSub")}</p>
         </div>
-        <Badge tone="green">{t("realRecords")}</Badge>
+        <Badge tone={overview.is_demo?'blue':'green'}>{t(overview.is_demo?'demo':'realRecords')}</Badge>
       </div>
       <div className="metric-strip">
         {[
